@@ -39,3 +39,76 @@ function updateCountdown() {
 setInterval(updateCountdown,1000);
 
 updateCountdown();
+/* ===========================
+Compteurs animés
+=========================== */
+
+const counters = document.querySelectorAll(".counter");
+
+let counterStarted = false;
+
+function startCounters() {
+
+    if (counterStarted) return;
+
+    counterStarted = true;
+
+    counters.forEach(counter => {
+
+        const target = Number(counter.dataset.target);
+
+        let value = 0;
+
+        const step = Math.max(1, Math.ceil(target / 100));
+
+        const timer = setInterval(() => {
+
+            value += step;
+
+            if (value >= target) {
+
+                counter.textContent = target;
+
+                clearInterval(timer);
+
+            } else {
+
+                counter.textContent = value;
+
+            }
+
+        },20);
+
+    });
+
+}
+
+/* ===========================
+Intersection Observer
+=========================== */
+
+const revealElements = document.querySelectorAll(".reveal");
+
+const observer = new IntersectionObserver(entries=>{
+
+entries.forEach(entry=>{
+
+if(entry.isIntersecting){
+
+entry.target.classList.add("active");
+
+startCounters();
+
+}
+
+});
+
+},{
+threshold:.3
+});
+
+revealElements.forEach(section=>{
+
+observer.observe(section);
+
+});
